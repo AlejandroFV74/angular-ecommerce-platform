@@ -8,6 +8,7 @@
           placeholder="Type new todo"
           autofocus
           type="text"
+          (change)="changeHandler($event)"
         />
       </div>
     </header>
@@ -15,15 +16,24 @@
       <!-- This section should be hidden by default and shown when there are todos -->
       <section class="main">
         <ul class="todo-list">
-          <li class="completed">
-            <div class="view">
-              <input class="toggle" type="checkbox" checked />
-              <label>Learn JavaScript</label>
-              <button class="destroy"></button>
+          <li *ngFor="let task of tasks(); index as i ">
+            <div class="view" >
+              <input class="toggle" type="checkbox" />
+              <label>{{task}}</label>
+              <button class="destroy" (click)="deleteTask(i) "></button>
             </div>
             <input class="edit" value="Learn JavaScript" />
           </li>
-          <li>
+          <!--
+          <li class ="view">
+            <div class="view">
+              <input class="toggle" type="checkbox" />
+              <label>Learn JavaScript</label>
+              <button class="destroy"></button>
+            </div>
+            <input class="edit" value="Buy a unicorn" />
+          </li>
+          <li class ="completed">
             <div class="view">
               <input class="toggle" type="checkbox" />
               <label>Buy a unicorn</label>
@@ -39,6 +49,7 @@
             </div>
             <input class="edit" value="Make dishes" />
           </li>
+        -->
         </ul>
       </section>
       <!-- This footer should be hidden by default and shown when there are todos -->
