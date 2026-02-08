@@ -2,10 +2,11 @@ import { Component, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Task } from '../../models/task';
 import { Title } from '@angular/platform-browser';
+import { FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-home',
-  imports: [CommonModule],
+  imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './home.html',
   styleUrl: './home.css',
 })
@@ -18,10 +19,17 @@ export class Home {
     },
   ]);
 
-  changeHandler(event: Event) {
-    const inputElement = event.target as HTMLInputElement;
-    const newTask = inputElement.value;
-    this.addTask(newTask);
+  newTaskCtrl = new FormControl('', {
+    nonNullable: true,
+    validators: [Validators.required],
+  });
+
+  changeHandler() {
+    const value = this.newTaskCtrl.value;
+    if (this.newTaskCtrl.valid && value.trim() !== '') {
+      this.addTask(value);
+      this.newTaskCtrl.reset();
+    }
   }
 
   // Separar responsabilidad de agregar tarea
