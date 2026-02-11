@@ -1,4 +1,4 @@
-import { Component, signal } from '@angular/core';
+import { Component, computed, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Task } from '../../models/task';
 import { Title } from '@angular/platform-browser';
@@ -23,6 +23,19 @@ export class Home {
     nonNullable: true,
     validators: [Validators.required],
   });
+
+  filter = signal<'all' | 'pending' | 'completed'>('all');
+  tasksByFilter = computed(() => {
+    const filterValue = this.filter();
+    const tasks = this.tasks();
+    if (filterValue === 'pending'){
+      return tasks.filter(task => !task.completed);
+    }
+    if (filterValue === 'completed'){
+      return tasks.filter(task => task.completed);
+    }
+    return tasks;
+  })
 
   changeHandler() {
     const value = this.newTaskCtrl.value;
@@ -96,4 +109,9 @@ export class Home {
       });
     });
   }
+
+  changeFilter(filter: 'all' | 'pending' | 'completed') {
+    this.filter.set(filter);
+  }
+  
 }
